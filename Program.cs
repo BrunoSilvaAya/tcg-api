@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using TcgApi.Data;
 using TcgApi.Extensions;
 
@@ -24,9 +25,13 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddOpenApi();
 builder.Services.AddEndpoints(typeof(Program).Assembly);
 
 var app = builder.Build();
+
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.UseAuthentication();
 app.UseAuthorization();
