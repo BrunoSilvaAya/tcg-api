@@ -12,7 +12,7 @@ public class WaitlistEndpoints : IEndpoint
     {
         var group = app.MapGroup("/waitlist");
 
-        group.MapPost("/", async (
+        group.MapPost("", async (
             [FromBody] JoinWaitlistRequest request,
             AppDbContext db) =>
         {
@@ -26,7 +26,7 @@ public class WaitlistEndpoints : IEndpoint
             return Results.Created($"/waitlist/{entry.Id}", entry);
         });
 
-        group.MapGet("/", async (AppDbContext db) =>
+        group.MapGet("", async (AppDbContext db) =>
             Results.Ok(await db.WaitlistEntries.OrderBy(w => w.SignedUpAt).ToListAsync())
         ).RequireAuthorization();
 

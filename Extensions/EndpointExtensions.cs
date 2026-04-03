@@ -20,9 +20,11 @@ public static class EndpointExtensions
     public static IApplicationBuilder MapEndpoints(this WebApplication app)
     {
         var endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
+        var routeGroup = app.MapGroup(string.Empty)
+            .RequireCors("AngularDev");
 
         foreach (var endpoint in endpoints)
-            endpoint.MapEndpoints(app);
+            endpoint.MapEndpoints(routeGroup);
 
         return app;
     }

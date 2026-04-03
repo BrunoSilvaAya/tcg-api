@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -33,6 +44,7 @@ var app = builder.Build();
 app.MapOpenApi();
 app.MapScalarApiReference();
 
+app.UseCors("AngularDev");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapEndpoints();
